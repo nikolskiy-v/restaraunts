@@ -7,6 +7,8 @@ router = APIRouter(tags=['menu'])
 @router.get('/menu')
 async def get_menus():
     ...
+
+
 @router.get('/menu/{menu_id}')
 async def get_menu(
         menu_id: str
@@ -17,5 +19,7 @@ async def get_menu(
         created_at= datetime.now(),
         updated_at= datetime.now()
     )
+
+
 #async def create_menu():
 #    ... 
