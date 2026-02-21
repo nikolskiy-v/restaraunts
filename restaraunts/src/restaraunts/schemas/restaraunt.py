@@ -3,5 +3,5 @@ from .menu import Menu
 
 class Restaraunt(Base):
     name: str
-    menu: Menu
-    orders: list
+    menu: list[Menu]
+    orders: list[Order]
