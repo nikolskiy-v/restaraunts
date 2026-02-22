@@ -10,3 +10,4 @@ class MenuCreate(BaseModel):
 
 class Menu(Base, MenuCreate):
     pass
+
