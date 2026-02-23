@@ -4,7 +4,7 @@ from .base import Base
 
 class MenuCreate(BaseModel):
     items: list[Item]
-    resraraunt_id: str
+    restaraunt_id: str
     version: int
     name: str
 

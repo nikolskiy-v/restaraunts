@@ -4,5 +4,5 @@ from .order import Order
 
 class Restaraunt(Base):
     name: str
-    menus: list[Menu]
-    orders: list[Order]
+    menus: list[Menu | None]
+    orders: list[Order | None]

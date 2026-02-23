@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ...schemas.menu import Menu
+from src.restaraunts.schemas.menu import Menu
 from datetime import datetime
 
 router = APIRouter(tags=['menu'])
@@ -22,8 +22,6 @@ async def get_menu(
         created_at= datetime.now(),
         updated_at= datetime.now()
     )
-
-
 
 
 #async def create_menu():

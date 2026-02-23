@@ -4,7 +4,7 @@ import enum
 
 class Order(Base):
     ordereditems: list[OrderedItem]
-    status: str
+    status: OrderStatus
     price: int
 
 
