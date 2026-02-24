@@ -1,15 +1,15 @@
 from fastapi import APIRouter
-from src.restaraunts.schemas.order import Order
+from src.restaraunts.schemas.order import Order, OrderStatus
 from datetime import datetime
 
 router = APIRouter(tags=['order'])
 
-@router.get('/{restaraunt}/order')
+@router.get('/{restaraunt}/orders')
 async def get_orders():
     ...
 
 
-@router.get('/{restaraunt}/order/{order_id}')
+@router.get('/{restaraunt}/orders/{order_id}')
 async def get_order(
         order_id: str
 ) -> Order:
@@ -21,4 +21,28 @@ async def get_order(
         status= 'Новый',
         price= 9999
     )
+
+
+@router.post('/{restaraunt}/orders')
+async def add_order(
+    order: Order
+):
+    #логика добавления заказа в БД
+    pass
+
+
+@router.post('/{restaraunt}/orders/{order_id}/items/{item_id}')
+async def add_item_to_order(
+    order_id: str,
+    item_id: str
+):
+    pass
+
+
+@router.patch("/{restaraunt}/orders/{order_id}", response_model=dict)
+def update_order_status(
+    order_id: int, 
+    order_update: OrderStatus
+):
+    pass
 
