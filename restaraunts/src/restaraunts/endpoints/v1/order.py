@@ -4,12 +4,12 @@ from datetime import datetime
 
 router = APIRouter(tags=['order'])
 
-@router.get('/{restaraunt}/orders')
+@router.get('/restaurants/{restaurant_id}/orders')
 async def get_orders():
     ...
 
 
-@router.get('/{restaraunt}/orders/{order_id}')
+@router.get('/restaurants/{restaurant_id}/orders/{order_id}')
 async def get_order(
         order_id: str
 ) -> Order:
@@ -23,7 +23,7 @@ async def get_order(
     )
 
 
-@router.post('/{restaraunt}/orders')
+@router.post('/restaurants/{restaurant_id}/orders')
 async def add_order(
     order: Order
 ):
@@ -31,7 +31,7 @@ async def add_order(
     pass
 
 
-@router.post('/{restaraunt}/orders/{order_id}/items/{item_id}')
+@router.post('/restaurants/{restaurant_id}/orders/{order_id}/items/{item_id}')
 async def add_item_to_order(
     order_id: str,
     item_id: str
@@ -39,7 +39,7 @@ async def add_item_to_order(
     pass
 
 
-@router.patch("/{restaraunt}/orders/{order_id}", response_model=dict)
+@router.patch("/restaurants/{restaurant_id}/orders/{order_id}", response_model=dict)
 def update_order_status(
     order_id: int, 
     order_update: OrderStatus

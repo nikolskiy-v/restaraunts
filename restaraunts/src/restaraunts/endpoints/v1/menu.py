@@ -4,12 +4,12 @@ from datetime import datetime
 
 router = APIRouter(tags=['menu'])
 
-@router.get('/{restaraunt}/menu')
+@router.get('/restaurants/{restaurant_id}/menu')
 async def get_menus():
     ...
 
 
-@router.get('/{restaraunt}/menu/{menu_id}')
+@router.get('/restaurants/{restaurant_id}/menu/{menu_id}')
 async def get_menu(
         menu_id: str
 ) -> Menu:
