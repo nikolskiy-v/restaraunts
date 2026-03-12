@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from src.restaraunts.schemas.item import Item
 from src.restaraunts.schemas.ordereditem import OrderedItem, OrderedItemStatus
-from src.restaraunts.services.item import test_item
+from src.restaraunts.repo.item import test_item
 from datetime import datetime
 
 router = APIRouter(tags=['item'])
