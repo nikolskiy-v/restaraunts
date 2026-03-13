@@ -51,3 +51,13 @@ def add_item(name, price):
             VALUES (?, ?)
         ''', (name, price))
         print(f"Товар '{name}' добавлен. ID: {cursor.lastrowid}")
+
+
+def delete_item(item_id):
+    with sqlite3.connect('my_database.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM Items WHERE id = ?", (item_id,))
+        if cursor.rowcount > 0:
+            print(f"Товар с ID {item_id} удален.")
+        else:
+            print(f"Товар с ID {item_id} не найден.")

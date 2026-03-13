@@ -10,9 +10,11 @@ CREATE TABLE IF NOT EXISTS OrderedItems (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     item_id INTEGER,
-    "status" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'Не готов',
     price REAL NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
+    order_id INTEGER,
+    FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE SET NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE RESTRICT
 )
 ''')
 
@@ -31,14 +33,14 @@ connection.commit()
 connection.close()
 
 
-def add_ordered_item(item_id, status, price):
+def add_ordered_item(item_id, status, price, order_id):
     with sqlite3.connect('my_database.db') as conn:
         conn.execute("PRAGMA foreign_keys = ON;")
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO OrderedItems (item_id, "status", price)
-            VALUES (?, ?, ?)
-        ''', (item_id, status, price))
+            INSERT INTO OrderedItems (item_id, "status", price, order_id)
+            VALUES (?, ?, ?, ?)
+        ''', (item_id, status, price, order_id))
         conn.commit()
         return cursor.lastrowid
 
@@ -51,3 +53,15 @@ def update_item_status(ordereditem_id, new_status):
             WHERE id = ?
         ''', (new_status, ordereditem_id))
         conn.commit()
+
+#Тест на "битую" ссылку
+#def test_foreign_key_insert():
+#    with sqlite3.connect('my_database.db') as conn:
+#        conn.execute("PRAGMA foreign_keys = ON;")
+#        try:
+            # Пытаемся добавить заказ к несуществующему товару
+#            conn.execute('INSERT INTO OrderedItems (item_id, "status", price, order_id) VALUES (99999, "test", 100, 11111)')
+#            print("❌ Ошибка: Внешний ключ НЕ работает (запись добавлена)")
+#        except sqlite3.IntegrityError as e:
+#            print(f"✅ Успех: База запретила вставку ({e})")
+#test_foreign_key_insert()
