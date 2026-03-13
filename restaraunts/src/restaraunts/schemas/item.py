@@ -3,3 +3,5 @@ from .base import Base
 
 class Item(Base):
     price: int
+    name: str
+    

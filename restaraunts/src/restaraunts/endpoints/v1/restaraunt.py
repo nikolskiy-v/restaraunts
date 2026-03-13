@@ -1,16 +1,15 @@
 from fastapi import APIRouter
-from restaraunts.schemas.restaraunt import Restaraunt
+from src.restaraunts.schemas.restaraunt import Restaraunt
 from datetime import datetime
-from restaraunts..schemas.menu import Menu
 
-router = APIRouter(tags=['restaraunt'])
+router = APIRouter(tags=['restaraunts'])
 
-@router.get('/restaraunt')
+@router.get('/restaraunts')
 async def get_restaraunts():
     ...
 
 
-@router.get('/restaraunt/{restaraunt_id}')
+@router.get('/restaurants/{restaurant_id}')
 async def get_restaraunt(
         restaraunt_id: str
 )-> Restaraunt :
@@ -19,5 +18,5 @@ async def get_restaraunt(
         created_at= datetime.now(),
         updated_at= datetime.now(),
         name= 'test',
-        menu= [],
+        menus= [],
         orders= [])

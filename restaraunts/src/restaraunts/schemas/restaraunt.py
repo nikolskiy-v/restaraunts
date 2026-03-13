@@ -1,7 +1,8 @@
 from .base import Base
 from .menu import Menu
+from .order import Order
 
 class Restaraunt(Base):
     name: str
-    menu: list[Menu]
-    orders: list[Order]
+    menus: list[Menu | None]
+    orders: list[Order | None]
