@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS OrderedItems (
     item_id INTEGER,
     "status" TEXT NOT NULL,
     price REAL NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
 )
 ''')
 
