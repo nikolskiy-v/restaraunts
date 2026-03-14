@@ -1,7 +1,6 @@
-import sqlite3
+from src.restaraunts.database import get_connection
 
-connection = sqlite3.connect('my_database.db')
-connection.execute("PRAGMA foreign_keys = ON;")
+connection = get_connection()
 cursor = connection.cursor()
 
 cursor.execute('''
@@ -33,7 +32,7 @@ connection.close()
 
 
 def add_order(status, price, restaraunt_id):
-    with sqlite3.connect('my_database.db') as conn:
+    with get_connection() as conn:
         conn.execute("PRAGMA foreign_keys = ON;")
         cursor = conn.cursor()
         cursor.execute('''
@@ -44,7 +43,7 @@ def add_order(status, price, restaraunt_id):
         return cursor.lastrowid
 
 def update_order_status(order_id, new_status):
-    with sqlite3.connect('my_database.db') as conn:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE Orders

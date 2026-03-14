@@ -1,7 +1,6 @@
-import sqlite3
+from src.restaraunts.database import get_connection
 
-connection = sqlite3.connect('my_database.db')
-connection.execute("PRAGMA foreign_keys = ON;")
+connection = get_connection()
 cursor = connection.cursor()
 
 cursor.execute('''

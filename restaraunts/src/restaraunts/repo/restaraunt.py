@@ -1,6 +1,7 @@
-import sqlite3
+from src.restaraunts.database import get_connection
+from src.restaraunts.schemas.restaraunt import Restaraunt
 
-connection = sqlite3.connect('my_database.db')
+connection = get_connection()
 cursor = connection.cursor()
 
 cursor.execute('''
@@ -25,3 +26,23 @@ END;
 
 connection.commit()
 connection.close()
+
+
+def get_all_restaraunts_from_db():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Restaraunts")
+        rows = cursor.fetchall()
+        # Превращаем каждую строку в объект Restaraunt
+        return [Restaraunt(**dict(row)) for row in rows]
+
+
+def add_restaraunt(name):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO Restaraunts (name) 
+            VALUES (?)
+        ''', (name,))
+        print(f"Ресторан '{name}' добавлен. ID: {cursor.lastrowid}")
+#add_restaraunt('Макколи')
