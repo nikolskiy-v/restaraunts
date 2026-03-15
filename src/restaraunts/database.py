@@ -1,5 +1,5 @@
 import sqlite3
-from restaraunts.config import DB_PATH 
+from src.restaraunts.config import DB_PATH
 
 def get_connection():
     conn = sqlite3.connect(DB_PATH)

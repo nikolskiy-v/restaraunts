@@ -14,7 +14,9 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "restaraunts", from = "src"}]
+packages = [
+    { include = "src" }
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

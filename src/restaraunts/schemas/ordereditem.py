@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from .base import Base
-from .item import Item
+from src.restaraunts.schemas.item import Item
+from src.restaraunts.schemas.base import Base
 import enum
 
 class OrderedItem(Base):

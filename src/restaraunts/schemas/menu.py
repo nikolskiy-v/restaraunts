@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from .item import Item
-from .base import Base
+from src.restaraunts.schemas.item import Item
+from src.restaraunts.schemas.base import Base
 
 class MenuCreate(BaseModel):
     items: list[Item]

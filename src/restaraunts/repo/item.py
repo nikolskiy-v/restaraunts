@@ -1,4 +1,4 @@
-from restaraunts.database import get_connection
+from src.restaraunts.database import get_connection
 
 
 connection = get_connection()

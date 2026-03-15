@@ -1,5 +1,5 @@
 from .base import Base
-from .ordereditem import OrderedItem
+from src.restaraunts.schemas.ordereditem import OrderedItem
 import enum
 
 class Order(Base):
