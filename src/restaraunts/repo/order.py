@@ -33,7 +33,6 @@ connection.close()
 
 def add_order(status, price, restaraunt_id):
     with get_connection() as conn:
-        conn.execute("PRAGMA foreign_keys = ON;")
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO Orders ("status", price, restaraunt_id)

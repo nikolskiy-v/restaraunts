@@ -45,4 +45,4 @@ def add_restaraunt(name):
             VALUES (?)
         ''', (name,))
         print(f"Ресторан '{name}' добавлен. ID: {cursor.lastrowid}")
-add_restaraunt('Макколи')
+#add_restaraunt('Макколи')

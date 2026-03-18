@@ -34,7 +34,6 @@ connection.close()
 
 def add_ordered_item(item_id, status, price, order_id):
     with get_connection() as conn:
-        conn.execute("PRAGMA foreign_keys = ON;")
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO OrderedItems (item_id, "status", price, order_id)
@@ -56,7 +55,6 @@ def update_item_status(ordereditem_id, new_status):
 #Тест на "битую" ссылку
 #def test_foreign_key_insert():
 #    with get_connection() as conn:
-#        conn.execute("PRAGMA foreign_keys = ON;")
 #        try:
             # Пытаемся добавить заказ к несуществующему товару
 #            conn.execute('INSERT INTO OrderedItems (item_id, "status", price, order_id) VALUES (99999, "test", 100, 11111)')
