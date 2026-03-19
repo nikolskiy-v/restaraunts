@@ -2,12 +2,13 @@ from fastapi import APIRouter
 from src.restaraunts.schemas.restaraunt import Restaraunt
 from src.restaraunts.repo.restaraunt import get_all_restaraunts_from_db
 from datetime import datetime
+import asyncio
 
 router = APIRouter(tags=['restaraunts'])
 
 @router.get('/restaraunts')
 async def get_restaraunts() -> list[Restaraunt]:
-    restaraunts = get_all_restaraunts_from_db()
+    restaraunts = asyncio.run(get_all_restaraunts_from_db())
     return restaraunts
 
 
