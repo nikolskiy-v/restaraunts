@@ -30,7 +30,7 @@ async def init_db():
 async def get_all_restaraunts_from_db():
     async with get_cursor() as cursor:
         await cursor.execute("SELECT * FROM Restaraunts")
-        rows = cursor.fetchall()
+        rows = await cursor.fetchall() 
         # Превращаем каждую строку в объект Restaraunt
         return [Restaraunt(**dict(row)) for row in rows]
 
@@ -43,4 +43,4 @@ async def add_restaraunt(name):
         ''', (name,))
         print(f"Ресторан '{name}' добавлен. ID: {cursor.lastrowid}")
 
-#asyncio.run(add_restaraunt('Макколи'))
+#asyncio.run(add_restaraunt('Пхали'))

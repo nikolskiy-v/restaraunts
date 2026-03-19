@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from src.restaraunts.schemas.item import Item
 from src.restaraunts.schemas.ordereditem import OrderedItem, OrderedItemStatus
-from src.restaraunts.repo.item import test_item
 from datetime import datetime
 
 router = APIRouter(tags=['item'])
@@ -15,13 +14,14 @@ async def get_items():
 async def get_item(
         item_id: str
 ) -> Item:
-    return Item(
-        id= item_id,
-        created_at= datetime.now(),
-        updated_at= datetime.now(),
-        price= 999,
-        name= 'test_item_name'
-    )
+    ...
+    # return Item(
+    #     id= item_id,
+    #     created_at= datetime.now(),
+    #     updated_at= datetime.now(),
+    #     price= 999,
+    #     name= 'test_item_name'
+    # )
 
 
 @router.get('/restaurants/{restaurant_id}/orders/{order_id}/items')
@@ -33,14 +33,15 @@ async def get_ordereditems():
 async def get_ordereditem(
         item_id: str
 ) -> OrderedItem:
-    return OrderedItem(
-        id= item_id,
-        created_at= datetime.now(),
-        updated_at= datetime.now(),
-        item= test_item,
-        status= 'Не готов',
-        price= 999
-    )
+    ...
+    # return OrderedItem(
+    #     id= item_id,
+    #     created_at= datetime.now(),
+    #     updated_at= datetime.now(),
+    #     item= test_item,
+    #     status= 'Не готов',
+    #     price= 999
+    # )
 
 
 @router.patch("/restaurants/{restaurant_id}/orders/{order_id}/items/{item_id}", response_model=dict)

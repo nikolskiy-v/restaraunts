@@ -8,7 +8,7 @@ router = APIRouter(tags=['restaraunts'])
 
 @router.get('/restaraunts')
 async def get_restaraunts() -> list[Restaraunt]:
-    restaraunts = asyncio.run(get_all_restaraunts_from_db())
+    restaraunts = await get_all_restaraunts_from_db()
     return restaraunts
 
 
