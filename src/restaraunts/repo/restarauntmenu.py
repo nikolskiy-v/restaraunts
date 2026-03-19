@@ -28,3 +28,14 @@ async def init_db():
         ''')
 
 #asyncio.run(init_db())
+
+
+async def add_restarauntmenu(restaraunt_id, menu_id):
+    async with get_cursor() as cursor:
+        await cursor.execute('''
+            INSERT INTO RestarauntMenus (restaraunt_id, menu_id) 
+            VALUES (?, ?)
+        ''', (restaraunt_id, menu_id))
+        print(f"Меню с ID: '{menu_id}' добавлено к ресторану с ID: '{restaraunt_id}'")
+
+#asyncio.run(add_restarauntmenu(2, 1))

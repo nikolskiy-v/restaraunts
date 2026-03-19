@@ -1,4 +1,5 @@
 from src.restaraunts.database import get_cursor
+from src.restaraunts.schemas.menu import Menu
 #import asyncio
 
 
@@ -26,3 +27,27 @@ async def init_db():
         ''')
 
 #asyncio.run(init_db())
+
+
+async def add_menu(name):
+    async with get_cursor() as cursor:
+        await cursor.execute('''
+            INSERT INTO Menus (name) 
+            VALUES (?)
+        ''', (name,))
+        print(f"Меню '{name}' добавлено. ID: {cursor.lastrowid}")
+
+#asyncio.run(add_menu('Сезонное'))
+
+
+async def get_menus_for_restaraunt(restaraunt_id: int):
+    async with get_cursor() as cursor:
+        query = '''
+            SELECT m.* 
+            FROM Menus m
+            JOIN RestarauntMenus rm ON m.id = rm.menu_id
+            WHERE rm.restaraunt_id = ?
+        '''
+        await cursor.execute(query, (restaraunt_id,))
+        rows = await cursor.fetchall()
+        return [Menu(**dict(row)) for row in rows]
