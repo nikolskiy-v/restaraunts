@@ -35,6 +35,18 @@ async def get_all_restaraunts_from_db():
         return [Restaraunt(**dict(row)) for row in rows]
 
 
+async def get_restaraunt_from_db(restaraunt_id: int):
+    async with get_cursor() as cursor:
+        await cursor.execute(
+            "SELECT * FROM Restaraunts WHERE id = ?",
+            (restaraunt_id,)
+        )
+        row = await cursor.fetchone()
+        if row is None:
+            return None
+        return Restaraunt(**dict(row))
+        
+
 async def add_restaraunt(name):
     async with get_cursor() as cursor:
         await cursor.execute('''
