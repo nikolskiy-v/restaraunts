@@ -40,7 +40,7 @@ async def add_menu(name):
 #asyncio.run(add_menu('Сезонное'))
 
 
-async def get_menus_for_restaraunt(restaraunt_id: int):
+async def get_all_for_restaraunt(restaraunt_id: int):
     async with get_cursor() as cursor:
         query = '''
             SELECT m.* 
@@ -51,3 +51,19 @@ async def get_menus_for_restaraunt(restaraunt_id: int):
         await cursor.execute(query, (restaraunt_id,))
         rows = await cursor.fetchall()
         return [Menu(**dict(row)) for row in rows]
+    
+
+async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int):
+    async with get_cursor() as cursor:
+        query = '''
+            SELECT m.* 
+            FROM Menus m
+            JOIN RestarauntMenus rm ON m.id = rm.menu_id
+            WHERE rm.restaraunt_id = ?
+            AND rm.menu_id = ?
+        '''
+        await cursor.execute(query, (restaraunt_id, menu_id))
+        row = await cursor.fetchone()
+        if row is None:
+            return None
+        return Menu(**dict(row))
