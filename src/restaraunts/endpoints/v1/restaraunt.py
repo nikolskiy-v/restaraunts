@@ -19,3 +19,7 @@ async def get_restaraunt(restaraunt_id: int) -> Restaraunt:
             detail=f"Restaurant with id {restaraunt_id} not found"
         )
     return r
+
+@router.patch("/restaraunt/{restaraunt_id}/menu/{menu_id}")
+async def add_menu_to_rest(restaraunt_id: int, menu_id: int):
+    await restaraunt.link_restaurant_and_menu(restaraunt_id, menu_id)

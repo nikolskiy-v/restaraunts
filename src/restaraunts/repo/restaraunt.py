@@ -56,3 +56,11 @@ async def add_restaraunt(name):
         print(f"Ресторан '{name}' добавлен. ID: {cursor.lastrowid}")
 
 #asyncio.run(add_restaraunt('Пхали'))
+
+
+async def link_restaurant_and_menu(restaurant_id: int, menu_id: int):
+    async with get_cursor() as cursor:
+        await cursor.execute('''
+            INSERT OR IGNORE INTO RestarauntMenus (restaraunt_id, menu_id)
+            VALUES (?, ?)
+        ''', (restaurant_id, menu_id))
