@@ -40,6 +40,13 @@ async def add_menu(name):
 #asyncio.run(add_menu('Сезонное'))
 
 
+async def get_all():
+    async with get_cursor() as cursor:
+        await cursor.execute("SELECT * FROM Menus")
+        rows = await cursor.fetchall() 
+        return [Menu(**dict(row)) for row in rows]
+
+
 async def get_all_for_restaraunt(restaraunt_id: int):
     async with get_cursor() as cursor:
         query = '''

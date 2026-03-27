@@ -4,8 +4,14 @@ from src.restaraunts.repo import menu
 
 router = APIRouter(tags=['menu'])
 
+@router.get('/restaraunts/menus')
+async def get_all() -> list[Menu]:
+    menus = await menu.get_all()
+    return menus
+
+
 @router.get('/restaraunt/{restaraunt_id}/menu')
-async def get_menus(restaraunt_id: int) -> list[Menu]:
+async def get_all_for_r(restaraunt_id: int) -> list[Menu]:
     menus = await menu.get_all_for_restaraunt(restaraunt_id)
     return menus
 
