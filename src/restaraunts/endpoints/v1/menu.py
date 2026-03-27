@@ -10,17 +10,18 @@ async def get_all() -> list[Menu]:
     return menus
 
 
-@router.get('/restaraunt/{restaraunt_id}/menu')
+@router.get('/rrestaraunts/{restaraunt_id}/menu')
 async def get_all_for_r(restaraunt_id: int) -> list[Menu]:
     menus = await menu.get_all_for_restaraunt(restaraunt_id)
     return menus
 
 
-@router.get('/restaraunt/{restaraunt_id}/menu/{menu_id}')
+@router.get('/restaraunts/{restaraunt_id}/menu/{menu_id}')
 async def get_menu(restaraunt_id: int, menu_id: int) -> Menu:
     m = await menu.get_menu_for_restaraunt(restaraunt_id, menu_id)
     return m
 
 
-#async def create_menu():
-#    ... 
+@router.patch('/restaraunts/menu')
+async def create_menu(menu_name: str):
+    await menu.add_menu(menu_name)

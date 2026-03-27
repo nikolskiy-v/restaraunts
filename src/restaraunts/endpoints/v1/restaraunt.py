@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Response
 from src.restaraunts.schemas.restaraunt import Restaraunt
 from src.restaraunts.repo import restaraunt
+from src.restaraunts.repo import menu
 
 router = APIRouter(tags=['restaraunts'])
 
@@ -20,6 +21,13 @@ async def get_restaraunt(restaraunt_id: int) -> Restaraunt:
         )
     return r
 
-@router.patch("/restaraunt/{restaraunt_id}/menu/{menu_id}")
+@router.patch("/restaraunts/{restaraunt_id}/menu/{menu_id}")
 async def add_menu_to_rest(restaraunt_id: int, menu_id: int):
-    await restaraunt.link_restaurant_and_menu(restaraunt_id, menu_id)
+    result = await restaraunt.link_restaraunt_and_menu(restaraunt_id, menu_id)
+    if result == "not_found":
+        raise HTTPException(status_code=404, detail="Restaurant or Menu not found")
+    if result == "already_exists":
+        #связь уже есть(идемпотентно)
+        return Response(status_code=204)
+    all_menus = await menu.get_all_for_restaraunt(restaraunt_id)
+    return {"restaraunt_id": restaraunt_id, "menus": all_menus}

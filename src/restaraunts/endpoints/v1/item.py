@@ -52,7 +52,7 @@ def update_ordereditem_status(
     pass
 
 
-@router.delete('/restaraunt/{restaraunt_id}/orders/{order_id}/items/{item_id}')
+@router.delete('/restaraunts/{restaraunt_id}/orders/{order_id}/items/{item_id}')
 async def delete_ordereditem_from_order(
     item_id: str,
     order_id: str

@@ -35,7 +35,6 @@ async def add_menu(name):
             INSERT INTO Menus (name) 
             VALUES (?)
         ''', (name,))
-        print(f"Меню '{name}' добавлено. ID: {cursor.lastrowid}")
 
 #asyncio.run(add_menu('Сезонное'))
 
