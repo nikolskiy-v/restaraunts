@@ -27,7 +27,7 @@ async def init_db():
 #asyncio.run(init_db())
 
 
-async def get_all_restaraunts_from_db():
+async def get_all():
     async with get_cursor() as cursor:
         await cursor.execute("SELECT * FROM Restaraunts")
         rows = await cursor.fetchall() 
@@ -35,7 +35,7 @@ async def get_all_restaraunts_from_db():
         return [Restaraunt(**dict(row)) for row in rows]
 
 
-async def get_restaraunt_from_db(restaraunt_id: int):
+async def get_restaraunt(restaraunt_id: int):
     async with get_cursor() as cursor:
         await cursor.execute(
             "SELECT * FROM Restaraunts WHERE id = ?",
