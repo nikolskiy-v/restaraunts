@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status
-from src.restaraunts.schemas.menu import Menu, MenuCreate
+from src.restaraunts.schemas.menu import Menu, MenuCreate, MenuResponse
 from src.restaraunts.repo import menu
 
 router = APIRouter(tags=['menu'])
@@ -23,14 +23,14 @@ async def get_menu(restaraunt_id: int, menu_id: int) -> Menu:
 
 
 @router.post(
-    "/restaraunts/menu", 
+    "/restaraunts/menus", 
     status_code=status.HTTP_201_CREATED,
     summary="Создать новое меню"
 )
-async def create_menu(menu_data: MenuCreate):
+async def create_menu(menu_data: MenuCreate) -> MenuResponse:
     new_id = await menu.add_menu(menu_data.name)
-    return {
-        "id": new_id, 
-        "name": menu_data.name,
-        "status": "created"
-    }
+    return MenuResponse(
+        id=new_id, 
+        name=menu_data.name,
+        status="created"
+    )

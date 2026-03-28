@@ -6,3 +6,8 @@ class MenuCreate(BaseModel):
 
 class Menu(Base, MenuCreate):
     version: int
+
+class MenuResponse(BaseModel):
+    id: int
+    name: str
+    status: str = "created"
