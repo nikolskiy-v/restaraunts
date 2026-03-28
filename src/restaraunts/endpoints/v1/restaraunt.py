@@ -1,3 +1,4 @@
+from typing import Any
 from fastapi import APIRouter, HTTPException, status, Response
 from src.restaraunts.schemas.restaraunt import Restaraunt
 from src.restaraunts.schemas.restarauntmenu import LinkMenuResponse
@@ -25,11 +26,12 @@ async def get_restaraunt(restaraunt_id: int) -> Restaraunt:
 
 @router.post(
     "/restaraunts/{restaraunt_id}/menu/{menu_id}",
+    response_model=LinkMenuResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Привязать меню к ресторану",
     responses={204: {"model": None}}
 )
-async def add_menu_to_rest(restaraunt_id: int, menu_id: int) -> LinkMenuResponse | Response:
+async def add_menu_to_rest(restaraunt_id: int, menu_id: int) -> Any:
     result = await restaraunt.link_restaraunt_and_menu(restaraunt_id, menu_id)
     if result == "not_found":
         raise HTTPException(
