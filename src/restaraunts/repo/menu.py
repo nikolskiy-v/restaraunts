@@ -29,12 +29,13 @@ async def init_db():
 #asyncio.run(init_db())
 
 
-async def add_menu(name):
+async def add_menu(name: str) -> int:
     async with get_cursor() as cursor:
         await cursor.execute('''
             INSERT INTO Menus (name) 
             VALUES (?)
         ''', (name,))
+        return cursor.lastrowid
 
 #asyncio.run(add_menu('Сезонное'))
 

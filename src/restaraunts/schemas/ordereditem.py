@@ -1,12 +1,11 @@
-from pydantic import BaseModel
-from src.restaraunts.schemas.item import Item
 from src.restaraunts.schemas.base import Base
 import enum
 
 class OrderedItem(Base):
-    item: Item
+    item_id: str
     status: OrderedItemStatus
-    price: int
+    price: float
+    order_id: str
 
 
 class OrderedItemStatus(enum.StrEnum):

@@ -1,10 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from src.restaraunts.schemas.base import Base
 
 class MenuCreate(BaseModel):
-    version: int
-    name: str
+    name: str = Field(..., min_length=1, max_length=100, example="Летнее меню")
 
 class Menu(Base, MenuCreate):
-    pass
-
+    version: int
