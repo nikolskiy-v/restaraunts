@@ -1,26 +1,19 @@
 from fastapi import APIRouter
 from src.restaraunts.schemas.order import Order, OrderStatus
-from datetime import datetime
+from src.restaraunts.repo import order
 
 router = APIRouter(tags=['order'])
 
-@router.get('/restaraunts/{restaraunt_id}/orders')
-async def get_orders():
-    ...
+@router.get('/restaraunts/{restaraunt_id}/orders', summary="Получить список всех заказов (для ресторана)")
+async def get_all_for_r(restaraunt_id: int) -> list[Order]:
+    orders = await order.get_all_for_restaraunt(restaraunt_id)
+    return orders
 
 
-@router.get('/restaraunts/{restaraunt_id}/orders/{order_id}')
-async def get_order(
-        order_id: str
-) -> Order:
-    return Order(
-        id= order_id,
-        created_at= datetime.now(),
-        updated_at= datetime.now(),
-        ordereditems= [],
-        status= 'Новый',
-        price= 9999
-    )
+@router.get('/restaraunts/{restaraunt_id}/orders/{order_id}', summary="Получить детальную информацию о заказе (для ресторана)")
+async def get_order(restaraunt_id: int, order_id: int) -> Order:
+    o = await order.get_order_for_restaraunt(restaraunt_id, order_id)
+    return o
 
 
 @router.post('/restaraunts/{restaraunt_id}/orders')
@@ -45,4 +38,3 @@ def update_order_status(
     order_update: OrderStatus
 ):
     pass
-

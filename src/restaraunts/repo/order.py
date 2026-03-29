@@ -1,4 +1,5 @@
 from src.restaraunts.database import get_cursor
+from src.restaraunts.schemas.order import Order
 #import asyncio
 
 
@@ -46,3 +47,28 @@ async def update_order_status(order_id, new_status):
             SET "status" = ?
             WHERE id = ?
         ''', (new_status, order_id))
+
+
+async def get_all_for_restaraunt(restaraunt_id: int):
+    async with get_cursor() as cursor:
+        await cursor.execute('''
+            SELECT * 
+            FROM Orders
+            WHERE restaraunt_id = ?
+        ''', (restaraunt_id,))
+        rows = await cursor.fetchall()
+        return [Order(**dict(row)) for row in rows]
+    
+
+async def get_order_for_restaraunt(restaraunt_id: int, order_id: int):
+    async with get_cursor() as cursor:
+        await cursor.execute('''
+            SELECT * 
+            FROM Orders
+            WHERE restaraunt_id = ?
+            AND id = ?
+        ''', (restaraunt_id, order_id))
+        row = await cursor.fetchone()
+        if row is None:
+            return None
+        return Order(**dict(row))
