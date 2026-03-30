@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-from src.restaraunts.schemas.order import Order, OrderStatus
+from fastapi import APIRouter, status
+from src.restaraunts.schemas.order import Order, OrderCreate, OrderResponse, OrderStatus
 from src.restaraunts.repo import order
 
 router = APIRouter(tags=['order'])
@@ -16,12 +16,19 @@ async def get_order(restaraunt_id: int, order_id: int) -> Order:
     return o
 
 
-@router.post('/restaraunts/{restaraunt_id}/orders')
-async def add_order(
-    order: Order
-):
-    #логика добавления заказа в БД
-    pass
+@router.post(
+        '/restaraunts/{restaraunt_id}/orders',
+        status_code=status.HTTP_201_CREATED,
+        summary="Создать новый заказ для ресторана",
+)
+async def create_order(restaraunt_id: int, order_data: OrderCreate) -> OrderResponse:
+    new_id = await order.add_order(order_data.price, restaraunt_id)
+    return OrderResponse(
+        id=new_id, 
+        price=order_data.price,
+        restaraunt_id=restaraunt_id,
+        status="Новый"
+    )
 
 
 @router.post('/restaraunts/{restaraunt_id}/orders/{order_id}/items/{item_id}')

@@ -1,9 +1,20 @@
+from pydantic import BaseModel, Field
 from .base import Base
 import enum
 
-class Order(Base):
-    status: OrderStatus
+class OrderCreate(BaseModel):
+    price: float = Field(gt=0)
+
+
+class OrderResponse(BaseModel):
+    id: int
     price: float
+    restaraunt_id: int
+    status: str = "Новый"
+
+
+class Order(Base, OrderCreate):
+    status: OrderStatus
     restaraunt_id: int
 
 
