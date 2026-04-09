@@ -41,12 +41,16 @@ async def add_item(name, price) -> int:
 #asyncio.run(add_item("Кофе", 250))
 
 
-async def delete_item(item_id: int):
+async def delete(item_id: int):
     async with get_cursor() as cursor:
-        await cursor.execute(
-            "UPDATE Items SET is_active = 0 WHERE id = ?",
-            (item_id,)
-        )
+        await cursor.execute('''
+            UPDATE Items 
+            SET is_active = 0 
+            WHERE id = ?
+            RETURNING *
+        ''', (item_id,))
+        row = await cursor.fetchone() 
+        return Item(**dict(row))
 
 
 async def get_all(show_archived=False):
@@ -92,10 +96,14 @@ async def get_item_for_menu(menu_id: int, item_id: int):
         return Item(**dict(row))
 
 
-async def restore_item(item_id: int):
-    """Восстанавливает ранее деактивированный товар."""
+async def restore(item_id: int):
     async with get_cursor() as cursor:
-        await cursor.execute(
-            "UPDATE Items SET is_active = 1 WHERE id = ?",
-            (item_id,)
-        )
+        await cursor.execute('''
+            UPDATE Items 
+            SET is_active = 1 
+            WHERE id = ?
+            RETURNING *
+        ''', (item_id,))
+        row = await cursor.fetchone() 
+        return Item(**dict(row))
+

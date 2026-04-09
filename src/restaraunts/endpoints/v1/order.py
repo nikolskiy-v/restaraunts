@@ -37,7 +37,6 @@ async def create_order(restaraunt_id: int, order_data: OrderCreate) -> OrderResp
     )
 
 
-
 @router.patch(
         '/restaraunts/{restaraunt_id}/orders/{order_id}',
         summary="Изменить статус заказа"

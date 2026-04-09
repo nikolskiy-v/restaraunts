@@ -10,7 +10,7 @@ class OrderResponse(BaseModel):
     id: int
     price: float
     restaraunt_id: int
-    status: str = "Новый"
+    status: OrderStatus
 
 
 class Order(Base, OrderCreate):
