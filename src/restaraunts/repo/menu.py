@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.menu import Menu
+import sqlite3
 #import asyncio
 
 
@@ -29,18 +30,23 @@ async def init_db():
 #asyncio.run(init_db())
 
 
-async def add_menu(name):
+async def add_menu(name: str) -> int:
     async with get_cursor() as cursor:
         await cursor.execute('''
             INSERT INTO Menus (name) 
             VALUES (?)
         ''', (name,))
-        print(f"Меню '{name}' добавлено. ID: {cursor.lastrowid}")
-
-#asyncio.run(add_menu('Сезонное'))
+        return cursor.lastrowid
 
 
-async def get_menus_for_restaraunt(restaraunt_id: int):
+async def get_all():
+    async with get_cursor() as cursor:
+        await cursor.execute("SELECT * FROM Menus")
+        rows = await cursor.fetchall() 
+        return [Menu(**dict(row)) for row in rows]
+
+
+async def get_all_for_restaraunt(restaraunt_id: int):
     async with get_cursor() as cursor:
         query = '''
             SELECT m.* 
@@ -51,3 +57,35 @@ async def get_menus_for_restaraunt(restaraunt_id: int):
         await cursor.execute(query, (restaraunt_id,))
         rows = await cursor.fetchall()
         return [Menu(**dict(row)) for row in rows]
+    
+
+async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int):
+    async with get_cursor() as cursor:
+        query = '''
+            SELECT m.* 
+            FROM Menus m
+            JOIN RestarauntMenus rm ON m.id = rm.menu_id
+            WHERE rm.restaraunt_id = ?
+            AND rm.menu_id = ?
+        '''
+        await cursor.execute(query, (restaraunt_id, menu_id))
+        row = await cursor.fetchone()
+        if row is None:
+            return None
+        return Menu(**dict(row))
+    
+
+async def link_menu_and_iten(menu_id: int, item_id: int):
+    async with get_cursor() as cursor:
+        try:
+            await cursor.execute('''
+                INSERT INTO MenuItems (menu_id, item_id)
+                VALUES (?, ?)
+            ''', (menu_id, item_id))
+        except sqlite3.IntegrityError as e:
+            if "FOREIGN KEY constraint failed" in str(e):
+                return "not_found"
+            if "UNIQUE constraint failed" in str(e):
+                return "already_exists"
+            raise e
+        return "success"

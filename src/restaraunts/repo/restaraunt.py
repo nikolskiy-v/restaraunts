@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.restaraunt import Restaraunt
+import sqlite3
 #import asyncio
 
 async def init_db():
@@ -56,3 +57,20 @@ async def add_restaraunt(name):
         print(f"Ресторан '{name}' добавлен. ID: {cursor.lastrowid}")
 
 #asyncio.run(add_restaraunt('Пхали'))
+
+
+async def link_restaraunt_and_menu(restaraunt_id: int, menu_id: int):
+    async with get_cursor() as cursor:
+        try:
+            await cursor.execute('''
+                INSERT INTO RestarauntMenus (restaraunt_id, menu_id)
+                VALUES (?, ?)
+            ''', (restaraunt_id, menu_id))
+        except sqlite3.IntegrityError as e:
+            if "FOREIGN KEY constraint failed" in str(e):
+                return "not_found"
+            if "UNIQUE constraint failed" in str(e):
+                return "already_exists"
+            raise e
+        return "success"
+    

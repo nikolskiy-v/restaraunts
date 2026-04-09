@@ -1,15 +1,29 @@
+from pydantic import BaseModel, Field
 from .base import Base
-from src.restaraunts.schemas.ordereditem import OrderedItem
 import enum
 
-class Order(Base):
-    ordereditems: list[OrderedItem]
+class OrderCreate(BaseModel):
+    price: float = Field(gt=0)
+
+
+class OrderResponse(BaseModel):
+    id: int
+    price: float
+    restaraunt_id: int
+    status: str = "Новый"
+
+
+class Order(Base, OrderCreate):
     status: OrderStatus
-    price: int
+    restaraunt_id: int
 
 
-class OrderStatus(enum.StrEnum):
+class OrderStatus(str, enum.Enum):
     NEW = 'Новый'
     COMPLETED = 'Сформирован'
     READY = 'Готов'
     PAID = 'Оплачен'
+
+
+class OrderStatusUpdate(BaseModel):
+    new_status: OrderStatus 
