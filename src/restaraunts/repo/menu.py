@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.menu import Menu
+import sqlite3
 #import asyncio
 
 
@@ -37,8 +38,6 @@ async def add_menu(name: str) -> int:
         ''', (name,))
         return cursor.lastrowid
 
-#asyncio.run(add_menu('Сезонное'))
-
 
 async def get_all():
     async with get_cursor() as cursor:
@@ -74,3 +73,19 @@ async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int):
         if row is None:
             return None
         return Menu(**dict(row))
+    
+
+async def link_menu_and_iten(menu_id: int, item_id: int):
+    async with get_cursor() as cursor:
+        try:
+            await cursor.execute('''
+                INSERT INTO MenuItems (menu_id, item_id)
+                VALUES (?, ?)
+            ''', (menu_id, item_id))
+        except sqlite3.IntegrityError as e:
+            if "FOREIGN KEY constraint failed" in str(e):
+                return "not_found"
+            if "UNIQUE constraint failed" in str(e):
+                return "already_exists"
+            raise e
+        return "success"

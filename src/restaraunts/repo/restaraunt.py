@@ -73,3 +73,4 @@ async def link_restaraunt_and_menu(restaraunt_id: int, menu_id: int):
                 return "already_exists"
             raise e
         return "success"
+    
