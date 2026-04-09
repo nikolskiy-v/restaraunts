@@ -18,8 +18,12 @@ class Order(Base, OrderCreate):
     restaraunt_id: int
 
 
-class OrderStatus(enum.StrEnum):
+class OrderStatus(str, enum.Enum):
     NEW = 'Новый'
     COMPLETED = 'Сформирован'
     READY = 'Готов'
     PAID = 'Оплачен'
+
+
+class OrderStatusUpdate(BaseModel):
+    new_status: OrderStatus 

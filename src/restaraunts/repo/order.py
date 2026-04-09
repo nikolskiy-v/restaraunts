@@ -40,13 +40,16 @@ async def add_order(price, restaraunt_id):
         return cursor.lastrowid
 
 
-async def update_order_status(order_id, new_status):
+async def update_status(order_id, new_status):
     async with get_cursor() as cursor:
         await cursor.execute('''
             UPDATE Orders
             SET "status" = ?
             WHERE id = ?
+            RETURNING *
         ''', (new_status, order_id))
+        row = await cursor.fetchone() 
+        return Order(**dict(row))
 
 
 async def get_all_for_restaraunt(restaraunt_id: int):

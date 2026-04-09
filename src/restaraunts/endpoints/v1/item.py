@@ -44,6 +44,16 @@ async def get_ordereditem(
     # )
 
 
+
+@router.post('/restaraunts/{restaraunt_id}/orders/{order_id}/items/{item_id}')
+async def add_item_to_order(
+    order_id: str,
+    item_id: str
+):
+    pass
+
+
+
 @router.patch("/restaraunts/{restaraunt_id}/orders/{order_id}/items/{item_id}", response_model=dict)
 def update_ordereditem_status(
     item_id: int, 
