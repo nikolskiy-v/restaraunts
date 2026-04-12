@@ -3,7 +3,7 @@ from src.restaraunts.schemas.menu import Menu, MenuCreate, MenuResponse
 from src.restaraunts.schemas.menuitem import LinkItemResponse
 from src.restaraunts.repo import menu, item
 
-router = APIRouter(tags=['menu'])
+router = APIRouter()
 
 @router.get('/restaraunts/menus', summary="Получить список всех меню")
 async def get_all() -> list[Menu]:

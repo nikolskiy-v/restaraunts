@@ -4,7 +4,7 @@ from src.restaraunts.schemas.restarauntmenu import LinkMenuResponse
 from src.restaraunts.repo import restaraunt
 from src.restaraunts.repo import menu
 
-router = APIRouter(tags=['restaraunts'])
+router = APIRouter()
 
 @router.get('/restaraunts', summary="Получить список всех ресторанов")
 async def get_restaraunts() -> list[Restaraunt]:

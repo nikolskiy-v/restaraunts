@@ -3,7 +3,7 @@ from src.restaraunts.repo import item, ordereditem
 from src.restaraunts.schemas.item import Item, ItemCreate, ItemResponse
 from src.restaraunts.schemas.ordereditem import OrderedItem, OrderedItemStatus, OrderedItemResponse, OrderedItemStatusUpdate
 
-router = APIRouter(tags=['item'])
+router = APIRouter()
 
 
 @router.get('/restaraunts/items', summary="Получить список всех товаров")

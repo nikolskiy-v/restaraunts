@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException
 from src.restaraunts.schemas.order import Order, OrderCreate, OrderResponse, OrderStatusUpdate
 from src.restaraunts.repo import order
 
-router = APIRouter(tags=['order'])
+router = APIRouter()
 
 @router.get(
         '/restaraunts/{restaraunt_id}/orders',
