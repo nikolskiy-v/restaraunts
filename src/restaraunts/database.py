@@ -1,5 +1,6 @@
 import sqlite3
 import aiosqlite
+from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine
 from sqlalchemy import text, event
 from src.restaraunts.config import DB_PATH, DB_PATH_V2
@@ -41,9 +42,16 @@ async_session_factory = async_sessionmaker(
 )
 
 
-async def get_db():
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_factory() as session:
-        yield session
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
 
 
 async def test_conn():
