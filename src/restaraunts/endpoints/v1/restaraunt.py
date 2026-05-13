@@ -3,13 +3,13 @@ from src.restaraunts.schemas.restaraunt import Restaraunt
 from src.restaraunts.schemas.restarauntmenu import LinkMenuResponse
 from src.restaraunts.repo import restaraunt
 from src.restaraunts.repo import menu
+from typing import List
 
-router = APIRouter(tags=['restaraunts'])
+router = APIRouter()
 
 @router.get('/restaraunts', summary="Получить список всех ресторанов")
-async def get_restaraunts() -> list[Restaraunt]:
-    restaraunts = await restaraunt.get_all()
-    return restaraunts
+async def get_restaraunts() -> List[Restaraunt]:
+    return await restaraunt.get_all()
 
 
 @router.get('/restaraunts/{restaraunt_id}', summary="Получить детальную информацию о ресторане")

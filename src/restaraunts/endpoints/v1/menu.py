@@ -2,25 +2,23 @@ from fastapi import APIRouter, status, HTTPException, Response
 from src.restaraunts.schemas.menu import Menu, MenuCreate, MenuResponse
 from src.restaraunts.schemas.menuitem import LinkItemResponse
 from src.restaraunts.repo import menu, item
+from typing import List
 
-router = APIRouter(tags=['menu'])
+router = APIRouter()
 
 @router.get('/restaraunts/menus', summary="Получить список всех меню")
-async def get_all() -> list[Menu]:
-    menus = await menu.get_all()
-    return menus
+async def get_all() -> List[Menu]:
+    return await menu.get_all()
 
 
 @router.get('/restaraunts/{restaraunt_id}/menu', summary="Получить список всех меню (для ресторана)")
-async def get_all_for_r(restaraunt_id: int) -> list[Menu]:
-    menus = await menu.get_all_for_restaraunt(restaraunt_id)
-    return menus
+async def get_all_for_r(restaraunt_id: int) -> List[Menu]:
+    return await menu.get_all_for_restaraunt(restaraunt_id)
 
 
 @router.get('/restaraunts/{restaraunt_id}/menu/{menu_id}', summary="Получить детальную информацию о меню (для ресторана)")
 async def get_menu(restaraunt_id: int, menu_id: int) -> Menu:
-    m = await menu.get_menu_for_restaraunt(restaraunt_id, menu_id)
-    return m
+    return await menu.get_menu_for_restaraunt(restaraunt_id, menu_id)
 
 
 @router.post(
@@ -43,7 +41,7 @@ async def create_menu(menu_data: MenuCreate) -> MenuResponse:
     responses={204: {"model": None}}
 )
 async def add_item_to_menu(menu_id: int, item_id: int) -> LinkItemResponse:
-    result = await menu.link_menu_and_iten(menu_id, item_id)
+    result = await menu.link_menu_and_item(menu_id, item_id)
     if result == "not_found":
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

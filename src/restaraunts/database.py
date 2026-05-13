@@ -1,13 +1,11 @@
 import sqlite3
 import aiosqlite
-from src.restaraunts.config import DB_PATH
+from typing import AsyncGenerator
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine
+from sqlalchemy import text, event
+from src.restaraunts.config import DB_PATH, DB_PATH_V2
 from contextlib import asynccontextmanager
 
-# def get_connection():
-#     conn = sqlite3.connect(DB_PATH)
-#     conn.row_factory = sqlite3.Row  
-#     conn.execute("PRAGMA foreign_keys = ON") 
-#     return conn
 
 @asynccontextmanager
 async def get_cursor():
@@ -23,3 +21,41 @@ async def get_cursor():
         raise e
     finally:
         await conn.close()
+
+
+DATABASE_URL = f"sqlite+aiosqlite:///{DB_PATH_V2}"
+
+engine = create_async_engine(DATABASE_URL, echo=True)
+
+
+@event.listens_for(engine.sync_engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
+
+async_session_factory = async_sessionmaker(
+    bind=engine, 
+    class_=AsyncSession,
+    expire_on_commit=False
+)
+
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_factory() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
+
+
+async def test_conn():
+    async with async_session_factory() as session:
+        async with session.begin():
+            result = await session.execute(text("SELECT 'session is working'"))
+            print(result.scalar())
