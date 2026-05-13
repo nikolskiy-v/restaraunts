@@ -43,7 +43,7 @@ async def create_menu(menu_data: MenuCreate) -> MenuResponse:
     responses={204: {"model": None}}
 )
 async def add_item_to_menu(menu_id: int, item_id: int) -> LinkItemResponse:
-    result = await menu.link_menu_and_iten(menu_id, item_id)
+    result = await menu.link_menu_and_item(menu_id, item_id)
     if result == "not_found":
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

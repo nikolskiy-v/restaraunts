@@ -75,7 +75,7 @@ async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int):
         return Menu(**dict(row))
     
 
-async def link_menu_and_iten(menu_id: int, item_id: int):
+async def link_menu_and_item(menu_id: int, item_id: int):
     async with get_cursor() as cursor:
         try:
             await cursor.execute('''
