@@ -2,23 +2,22 @@ from fastapi import APIRouter, status, HTTPException, Response
 from src.restaraunts.repo import item, ordereditem
 from src.restaraunts.schemas.item import Item, ItemCreate, ItemResponse
 from src.restaraunts.schemas.ordereditem import OrderedItem, OrderedItemStatus, OrderedItemResponse, OrderedItemStatusUpdate
+from typing import List
 
 router = APIRouter()
 
 
 @router.get('/restaraunts/items', summary="Получить список всех товаров")
-async def get_all() -> list[Item]:
-    items = await item.get_all()
-    return items
+async def get_all() -> List[Item]:
+    return await item.get_all()
 
 
 @router.get(
     '/restaraunts/{restaraunt_id}/menu/{menu_id}/items',
     summary="Получить список всех товаров (для меню)"
 )
-async def get_all_for_m(menu_id: int) -> list[Item]:
-    items= await item.get_all_for_menu(menu_id)
-    return items
+async def get_all_for_m(menu_id: int) -> List[Item]:
+    return await item.get_all_for_menu(menu_id)
 
 
 @router.get(
@@ -26,8 +25,7 @@ async def get_all_for_m(menu_id: int) -> list[Item]:
     summary="Получить детальную информацию о товаре (для меню)"
 )
 async def get_item(menu_id: int, item_id: int) -> Item:
-    i = await item.get_item_for_menu(menu_id, item_id)
-    return i
+    return await item.get_item_for_menu(menu_id, item_id)
    
 
 @router.post(
@@ -45,13 +43,12 @@ async def create_item(item_data: ItemCreate) -> ItemResponse:
     )
 
 
-@router.patch(
-    '/restaraunts/items/{item_id}/deactivate',
+@router.delete(
+    '/restaraunts/items/{item_id}',
     summary="Деактивировать товар"
 )
 async def delete_item(item_id:int) -> Item:
-    deleted_item = await item.delete(item_id)
-    return deleted_item
+    return await item.delete(item_id)
 
 
 @router.patch(
@@ -59,23 +56,7 @@ async def delete_item(item_id:int) -> Item:
     summary="Восстановить ранее деактивированый товар"
 )
 async def restore_item(item_id:int) -> Item:
-    restored_item = await item.restore(item_id)
-    return restored_item
-
-
-@router.get('/restaraunts/{restaraunt_id}/orders/{order_id}/items', summary="Получить список всех товаров в заказе")
-async def get_all_ordered(order_id: int) -> list[OrderedItem]:
-    ordered_items = await ordereditem.get_all_ordered(order_id)
-    return ordered_items
-
-
-@router.get(
-    '/restaraunts/{restaraunt_id}/orders/{order_id}/items/{item_id}',
-    summary="Получить детальную информацию о товаре в заказе"
-)
-async def get_ordered_item(order_id: int, item_id: int) -> OrderedItem:
-    i = await ordereditem.get_ordereditem(order_id, item_id)
-    return i
+    return await item.restore(item_id)
 
 
 @router.post(

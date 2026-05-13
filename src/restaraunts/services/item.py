@@ -3,9 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.restaraunts.entities.item import Item
 from src.restaraunts.entities.menu import Menu
 from src.restaraunts.schemas.item import Item as ItemSchema
+from typing import List
 
 
-async def get_all_for_menu(menu_id: int, session: AsyncSession) -> list[ItemSchema]:
+async def get_all_for_menu(menu_id: int, session: AsyncSession) -> List[ItemSchema]:
     stmt = (
         select(Item)
         .where(Item.menus.any(Menu.id == menu_id)) 

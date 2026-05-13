@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.ordereditem import OrderedItem
+from typing import List
 #import asyncio
 
 
@@ -33,7 +34,7 @@ async def init_db():
 #asyncio.run(init_db())
 
 
-async def add_ordered_item(item_id: int, order_id: int):
+async def add_ordered_item(item_id: int, order_id: int) -> OrderedItem | None:
     async with get_cursor() as cursor:
         await cursor.execute('''
             INSERT INTO OrderedItems (item_id, order_id, price)
@@ -48,7 +49,7 @@ async def add_ordered_item(item_id: int, order_id: int):
         return OrderedItem(**dict(row))
     
 
-async def get_all_ordered(order_id: int):
+async def get_all_ordered(order_id: int) -> List[OrderedItem]:
     async with get_cursor() as cursor:
         await cursor.execute('''
             SELECT * 
@@ -59,7 +60,7 @@ async def get_all_ordered(order_id: int):
         return [OrderedItem(**dict(row)) for row in rows]
 
 
-async def get_ordereditem(order_id: int, ordereditem_id: int):
+async def get_ordereditem(order_id: int, ordereditem_id: int) -> OrderedItem | None:
     async with get_cursor() as cursor:
         await cursor.execute('''
             SELECT * 
@@ -73,7 +74,7 @@ async def get_ordereditem(order_id: int, ordereditem_id: int):
         return OrderedItem(**dict(row))
 
     
-async def update_status(ordereditem_id, new_status):
+async def update_status(ordereditem_id, new_status) -> OrderedItem:
     async with get_cursor() as cursor:
         await cursor.execute('''
             UPDATE OrderedItems

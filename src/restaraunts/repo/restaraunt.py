@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.restaraunt import Restaraunt
+from typing import List
 import sqlite3
 #import asyncio
 
@@ -28,15 +29,14 @@ async def init_db():
 #asyncio.run(init_db())
 
 
-async def get_all():
+async def get_all() -> List[Restaraunt]:
     async with get_cursor() as cursor:
         await cursor.execute("SELECT * FROM Restaraunts")
-        rows = await cursor.fetchall() 
-        # Превращаем каждую строку в объект Restaraunt
+        rows = await cursor.fetchall()
         return [Restaraunt(**dict(row)) for row in rows]
 
 
-async def get_restaraunt(restaraunt_id: int):
+async def get_restaraunt(restaraunt_id: int) -> Restaraunt | None:
     async with get_cursor() as cursor:
         await cursor.execute(
             "SELECT * FROM Restaraunts WHERE id = ?",
@@ -59,7 +59,7 @@ async def add_restaraunt(name):
 #asyncio.run(add_restaraunt('Пхали'))
 
 
-async def link_restaraunt_and_menu(restaraunt_id: int, menu_id: int):
+async def link_restaraunt_and_menu(restaraunt_id: int, menu_id: int) -> str:
     async with get_cursor() as cursor:
         try:
             await cursor.execute('''

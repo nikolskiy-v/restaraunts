@@ -1,6 +1,8 @@
 from fastapi import APIRouter, status, HTTPException
 from src.restaraunts.schemas.order import Order, OrderCreate, OrderResponse, OrderStatusUpdate
-from src.restaraunts.repo import order
+from src.restaraunts.schemas.ordereditem import OrderedItem
+from src.restaraunts.repo import order, ordereditem
+from typing import List
 
 router = APIRouter()
 
@@ -8,9 +10,8 @@ router = APIRouter()
         '/restaraunts/{restaraunt_id}/orders',
         summary="Получить список всех заказов (для ресторана)"
 )
-async def get_all_for_r(restaraunt_id: int) -> list[Order]:
-    orders = await order.get_all_for_restaraunt(restaraunt_id)
-    return orders
+async def get_all_for_r(restaraunt_id: int) -> List[Order]:
+    return await order.get_all_for_restaraunt(restaraunt_id)
 
 
 @router.get(
@@ -18,8 +19,7 @@ async def get_all_for_r(restaraunt_id: int) -> list[Order]:
         summary="Получить детальную информацию о заказе (для ресторана)"
 )
 async def get_order(restaraunt_id: int, order_id: int) -> Order:
-    o = await order.get_order_for_restaraunt(restaraunt_id, order_id)
-    return o
+    return await order.get_order_for_restaraunt(restaraunt_id, order_id)
 
 
 @router.post(
@@ -46,3 +46,17 @@ async def update_order_status(order_id: int, status_data: OrderStatusUpdate) -> 
     if not updated_order:
         raise HTTPException(status_code=404, detail="Order not found")    
     return updated_order
+
+
+@router.get('/restaraunts/{restaraunt_id}/orders/{order_id}/items', summary="Получить список всех товаров в заказе")
+async def get_all_ordered(order_id: int) -> List[OrderedItem]:
+    return await ordereditem.get_all_ordered(order_id)
+
+
+@router.get(
+    '/restaraunts/{restaraunt_id}/orders/{order_id}/items/{item_id}',
+    summary="Получить детальную информацию о товаре в заказе"
+)
+async def get_ordered_item(order_id: int, item_id: int) -> OrderedItem:
+    return await ordereditem.get_ordereditem(order_id, item_id)
+

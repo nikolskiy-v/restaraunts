@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.menu import Menu
+from typing import List
 import sqlite3
 #import asyncio
 
@@ -39,14 +40,14 @@ async def add_menu(name: str) -> int:
         return cursor.lastrowid
 
 
-async def get_all():
+async def get_all() -> List[Menu]:
     async with get_cursor() as cursor:
         await cursor.execute("SELECT * FROM Menus")
         rows = await cursor.fetchall() 
         return [Menu(**dict(row)) for row in rows]
 
 
-async def get_all_for_restaraunt(restaraunt_id: int):
+async def get_all_for_restaraunt(restaraunt_id: int) -> List[Menu]:
     async with get_cursor() as cursor:
         query = '''
             SELECT m.* 
@@ -59,7 +60,7 @@ async def get_all_for_restaraunt(restaraunt_id: int):
         return [Menu(**dict(row)) for row in rows]
     
 
-async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int):
+async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int) -> Menu | None:
     async with get_cursor() as cursor:
         query = '''
             SELECT m.* 
@@ -75,7 +76,7 @@ async def get_menu_for_restaraunt(restaraunt_id: int, menu_id: int):
         return Menu(**dict(row))
     
 
-async def link_menu_and_item(menu_id: int, item_id: int):
+async def link_menu_and_item(menu_id: int, item_id: int) -> str:
     async with get_cursor() as cursor:
         try:
             await cursor.execute('''

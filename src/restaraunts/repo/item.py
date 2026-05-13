@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.item import Item
+from typing import List
 #import asyncio
 
 
@@ -41,7 +42,7 @@ async def add_item(name, price) -> int:
 #asyncio.run(add_item("Кофе", 250))
 
 
-async def delete(item_id: int):
+async def delete(item_id: int) -> Item:
     async with get_cursor() as cursor:
         await cursor.execute('''
             UPDATE Items 
@@ -53,7 +54,7 @@ async def delete(item_id: int):
         return Item(**dict(row))
 
 
-async def get_all(show_archived=False):
+async def get_all(show_archived=False) -> List[Item]:
     """
     Получает список всех товаров.
     :param show_archived: Если True, вернет в том числе и 'удаленные' товары.
@@ -67,7 +68,7 @@ async def get_all(show_archived=False):
         return [Item(**dict(row)) for row in rows]
 
 
-async def get_all_for_menu(menu_id: int):
+async def get_all_for_menu(menu_id: int) -> List[Item]:
     async with get_cursor() as cursor:
         query = '''
             SELECT i.* 
@@ -80,7 +81,7 @@ async def get_all_for_menu(menu_id: int):
         return [Item(**dict(row)) for row in rows]
     
 
-async def get_item_for_menu(menu_id: int, item_id: int):
+async def get_item_for_menu(menu_id: int, item_id: int) -> Item | None:
     async with get_cursor() as cursor:
         query = '''
             SELECT i.* 
@@ -96,7 +97,7 @@ async def get_item_for_menu(menu_id: int, item_id: int):
         return Item(**dict(row))
 
 
-async def restore(item_id: int):
+async def restore(item_id: int) -> Item:
     async with get_cursor() as cursor:
         await cursor.execute('''
             UPDATE Items 
@@ -106,4 +107,3 @@ async def restore(item_id: int):
         ''', (item_id,))
         row = await cursor.fetchone() 
         return Item(**dict(row))
-

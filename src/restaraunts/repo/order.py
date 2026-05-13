@@ -1,5 +1,6 @@
 from src.restaraunts.database import get_cursor
 from src.restaraunts.schemas.order import Order
+from typing import List
 #import asyncio
 
 
@@ -31,7 +32,7 @@ async def init_db():
 #asyncio.run(init_db())
 
 
-async def add_order(price, restaraunt_id):
+async def add_order(price, restaraunt_id) -> int:
     async with get_cursor() as cursor:
         await cursor.execute('''
             INSERT INTO Orders (price, restaraunt_id)
@@ -40,7 +41,7 @@ async def add_order(price, restaraunt_id):
         return cursor.lastrowid
 
 
-async def update_status(order_id, new_status):
+async def update_status(order_id, new_status) -> Order:
     async with get_cursor() as cursor:
         await cursor.execute('''
             UPDATE Orders
@@ -52,7 +53,7 @@ async def update_status(order_id, new_status):
         return Order(**dict(row))
 
 
-async def get_all_for_restaraunt(restaraunt_id: int):
+async def get_all_for_restaraunt(restaraunt_id: int) -> List[Order]:
     async with get_cursor() as cursor:
         await cursor.execute('''
             SELECT * 
@@ -63,7 +64,7 @@ async def get_all_for_restaraunt(restaraunt_id: int):
         return [Order(**dict(row)) for row in rows]
     
 
-async def get_order_for_restaraunt(restaraunt_id: int, order_id: int):
+async def get_order_for_restaraunt(restaraunt_id: int, order_id: int) -> Order | None:
     async with get_cursor() as cursor:
         await cursor.execute('''
             SELECT * 

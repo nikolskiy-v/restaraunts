@@ -4,8 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.restaraunts.entities.menu import Menu
 from src.restaraunts.entities.associations import menu_item_association
 from src.restaraunts.schemas.menu import Menu as MenuSchema, MenuCreate, MenuResponse
+from typing import List
 
-async def get_all(session: AsyncSession) -> list[MenuSchema]:
+async def get_all(session: AsyncSession) -> List[MenuSchema]:
     stmt = select(Menu) 
     result = await session.execute(stmt)
     return [
@@ -27,7 +28,7 @@ async def add_menu(menu_create: MenuCreate, session:AsyncSession) -> MenuRespons
     return MenuResponse.model_validate(menu, from_attributes=True)
 
 
-async def link_menu_and_item(menu_id: int, item_id: int, session:AsyncSession):
+async def link_menu_and_item(menu_id: int, item_id: int, session:AsyncSession) -> str:
     data = {"menu_id": menu_id, "item_id": item_id}
     stmt = insert(menu_item_association).values(**data)
     try:
